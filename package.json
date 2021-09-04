@@ -1,0 +1,16 @@
+{
+  "name": "@estruyf/vscode",
+  "version": "0.0.1",
+  "description": "VS Code helpers for your project",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "code",
+    "vscode",
+    "helpers"
+  ],
+  "author": "Elio Struyf",
+  "license": "MIT"
+}
