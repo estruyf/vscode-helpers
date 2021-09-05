@@ -1,4 +1,4 @@
-# Visual Studio Code helpers
+# Visual Studio Code extension helpers
 
 The `@estruyf/vscode` package contains a couple of helpers to make Visual Studio Code Extension development easier.
 
