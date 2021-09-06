@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf dist",
     "watch": "tsc -w"
   },
   "keywords": [
@@ -16,11 +17,11 @@
   "license": "MIT",
   "homepage": "https://github.com/estruyf/vscode-helpers",
   "bugs": {
-    "url" : "https://github.com/estruyf/vscode-helpers/issues"
+    "url": "https://github.com/estruyf/vscode-helpers/issues"
   },
   "funding": {
-    "type" : "individual",
-    "url" : "https://github.com/sponsors/estruyf"
+    "type": "individual",
+    "url": "https://github.com/sponsors/estruyf"
   },
   "repository": {
     "type": "git",
