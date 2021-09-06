@@ -1,5 +1,5 @@
 import { WebviewApi } from 'vscode-webview';
-import { EventData } from '../models/EventData';
+import { EventData } from '../../models/EventData';
 
 export class Messenger {
   private static vscode: any;
@@ -21,7 +21,7 @@ export class Messenger {
    */
   public static listen<T>(callback: (event: EventData<T>) => void): void {
     window.addEventListener('message', (event) => {
-      callback(event as EventData<T>);
+      callback(event.data as EventData<T>);
     });
   }
   
