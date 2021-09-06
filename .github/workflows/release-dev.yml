@@ -3,10 +3,6 @@ on:
   push:
     branches:
       - dev
-  release:
-    types:
-      - published
-  workflow_dispatch:
 
 jobs:
   build:
@@ -23,12 +19,6 @@ jobs:
 
     - name: Run build
       run: npm run build
-
-    - name: Publish release
-      run: npm publish --access public
-      if: github.ref == 'refs/heads/main'
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         
     - name: Update the package version
       if: github.ref == 'refs/heads/dev'
