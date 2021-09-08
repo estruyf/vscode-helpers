@@ -55,10 +55,16 @@ import { Messenger } from '@estruyf/vscode/dist/client';
 // Get the VS Code API in your webview
 Messenger.getVsCodeAPI();
 
-// Listen to messages from your extension
-Messenger.listen((message) => {
-  console.log(message.command, message.data);
-});
+// Listen to messages from your extension.
+const listener = (message: MessageEvent<EventData<T>>) => {
+  const event = message.data;
+  console.log(event.command, event.data);
+};
+
+Messenger.listen<T>(listener);
+
+// Remove a listener
+Messenger.unlisten(listener);
 
 // Send a message to your extension
 Messenger.send('command', data);

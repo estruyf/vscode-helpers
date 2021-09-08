@@ -19,10 +19,16 @@ export class Messenger {
    * Listen to the message from your extension
    * @param callback
    */
-  public static listen<T>(callback: (event: EventData<T>) => void): void {
-    window.addEventListener('message', (event) => {
-      callback(event.data as EventData<T>);
-    });
+  public static listen<T>(callback: (event: MessageEvent<EventData<T>>) => void): void {
+    window.addEventListener('message', callback);
+  }
+
+  /**
+   * Remove the listener from the webview
+   * @param callback 
+   */
+  public static unlisten<T>(callback: (event: MessageEvent<EventData<T>>) => void): void {
+    window.removeEventListener('message', callback);
   }
   
   /**
