@@ -1,4 +1,4 @@
-import { ExtensionContext, extensions } from "vscode";
+import { ExtensionContext, ExtensionMode, extensions } from "vscode";
 
 export class ExtensionInfo {
   private static instance: ExtensionInfo;
@@ -61,5 +61,33 @@ export class ExtensionInfo {
    */
   public getPackageJson() {
     return this.ctx.extension.packageJSON;
+  }
+
+  /**
+   * Get the name of the extension
+   */
+   public get name(): string {
+    return this.ctx.extension.packageJSON.name;
+  }
+
+  /**
+   * Get the name of the extension
+   */
+   public get displayName(): string {
+    return this.ctx.extension.packageJSON.displayName;
+  }
+
+  /**
+   * Returns the extension's version
+   */
+  public get version(): string {
+    return this.ctx.extension.packageJSON.version;
+  }
+
+  /**
+   * Check if the extension is in production/development mode
+   */
+   public get isProductionMode(): boolean {
+    return this.ctx.extensionMode === ExtensionMode.Production;
   }
 }

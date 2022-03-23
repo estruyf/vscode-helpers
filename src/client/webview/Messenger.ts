@@ -1,6 +1,12 @@
 import { WebviewApi } from 'vscode-webview';
 import { EventData } from '../../models/EventData';
 
+interface ClientVsCode<T> {
+  getState: () => T;
+  setState: (data: T) => void;
+  postMessage: (msg: unknown) => void;
+}
+
 export class Messenger {
   private static vscode: any;
 
@@ -43,5 +49,25 @@ export class Messenger {
     } else {
       vscode.postMessage({ command });
     }
+  }
+
+  /**
+   * Get the state of the extension
+   * @returns 
+   */
+  public static getState = () => {    
+    const vscode = Messenger.getVsCodeAPI();
+    return vscode.getState();
+  }
+
+  /**
+   * Set the state of the extension
+   * @returns 
+   */
+  public static setState = (data: any) => {    
+    const vscode = Messenger.getVsCodeAPI();
+    vscode.setState({
+      ...data
+    });
   }
 }
