@@ -1,6 +1,6 @@
 {
   "name": "@estruyf/vscode",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "VS Code helpers for your extension development",
   "main": "dist/index.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "url": "https://github.com/estruyf/vscode-helpers"
   },
   "devDependencies": {
+    "@types/node": "^16.9.6",
     "@types/vscode": "1.60.0",
     "typescript": "^4.4.2"
   },
