@@ -42,10 +42,10 @@ export class Messenger {
    * @param command 
    * @param data 
    */
-  public static send(command: string, data?: any): void {
+  public static send(command: string, payload?: any): void {
     const vscode = Messenger.getVsCodeAPI();
-    if (data) {
-      vscode.postMessage({ command, data });
+    if (payload) {
+      vscode.postMessage({ command, payload });
     } else {
       vscode.postMessage({ command });
     }

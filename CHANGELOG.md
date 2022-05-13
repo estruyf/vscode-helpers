@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0] 2022-05-13
+
+- Changed the `EventData` interface data property to `payload`
+- `data` property changed to `payload` for sending events
+
 ## [0.0.3] 2022-03-23
 
 - Added webview `getState` and `setState` methods

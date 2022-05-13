@@ -58,7 +58,7 @@ Messenger.getVsCodeAPI();
 // Listen to messages from your extension.
 const listener = (message: MessageEvent<EventData<T>>) => {
   const event = message.data;
-  console.log(event.command, event.data);
+  console.log(event.command, event.payload);
 };
 
 Messenger.listen<T>(listener);
@@ -67,7 +67,7 @@ Messenger.listen<T>(listener);
 Messenger.unlisten(listener);
 
 // Send a message to your extension
-Messenger.send('command', data);
+Messenger.send('command', payload);
 ```
 
 #### WebviewHelper
