@@ -1,6 +1,6 @@
 {
   "name": "@estruyf/vscode",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "VS Code helpers for your extension development",
   "main": "dist/index.js",
   "scripts": {
