@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { EventData } from '../../models';
+import { EventData, MessageHandlerData } from '../../models';
 import { Messenger } from './Messenger';
 
 class MessageHandler {
@@ -7,11 +7,11 @@ class MessageHandler {
   private static listeners: { [commandId: string]: Function } = {};
 
   private constructor() {
-    Messenger.listen((message: MessageEvent<EventData<any>>) => {
-      const { command, payload } = message.data;
+    Messenger.listen((message: MessageEvent<MessageHandlerData<any>>) => {
+      const { requestId, payload } = message.data;
 
-      if (MessageHandler.listeners[command]) {
-        MessageHandler.listeners[command](payload);
+      if (requestId && MessageHandler.listeners[requestId]) {
+        MessageHandler.listeners[requestId](payload);
       }
     });
   }
@@ -43,21 +43,18 @@ class MessageHandler {
    * @returns 
    */
   public request<T>(message: string, payload?: any): Promise<T> {
-    const commandId = v4();
+    const requestId = v4();
 
     return new Promise((resolve, reject) => {
-      MessageHandler.listeners[commandId] = (payload: T) => {
+      MessageHandler.listeners[requestId] = (payload: T) => {
         resolve(payload);
 
-        if (MessageHandler.listeners[commandId]) {
-          delete MessageHandler.listeners[commandId];
+        if (MessageHandler.listeners[requestId]) {
+          delete MessageHandler.listeners[requestId];
         }
       };
 
-      Messenger.send(message, {
-        COMMAND_ID: commandId,
-        DATA: payload
-      });
+      Messenger.sendWithReqId(message, requestId, payload);
     });
   }
 }

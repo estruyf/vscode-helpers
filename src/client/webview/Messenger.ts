@@ -57,7 +57,7 @@ export class Messenger {
    * @param requestId 
    * @param payload 
    */
-  public static sendById(command: string, requestId: string, payload?: any): void {
+  public static sendWithReqId(command: string, requestId: string, payload?: any): void {
     const vscode = Messenger.getVsCodeAPI();
     if (payload) {
       vscode.postMessage({ command, requestId, payload });

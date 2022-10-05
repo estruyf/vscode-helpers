@@ -62,8 +62,9 @@ All you need to do to use it, is the following:
 import { messageHandler } from '@estruyf/vscode/dist/client';
 
 // Sends a message with id: "GET_DATA"
-messageHandler.request<string>("GET_DATA").then((data: string) => {
+messageHandler.request<any>("GET_DATA").then((data: any) => {
   // Do something with the returned data
+  console.log(data);
 });
 
 // Sends a message with id: "POST_DATA" - no data is expected back
@@ -73,6 +74,8 @@ messageHandler.send("POST_DATA", { dummy: "Nothing to report..." });
 **Extension**
 
 ```typescript
+import { MessageHandlerData } from '@estruyf/vscode'
+
 panel.webview.onDidReceiveMessage(message => {
   const { command, requestId, payload } = message;
 
@@ -81,9 +84,10 @@ panel.webview.onDidReceiveMessage(message => {
 
     // Send a response back to the webview
     panel.webview.postMessage({
-      command: requestId, // The requestId is used to identify the response
+      command,
+      requestId, // The requestId is used to identify the response
       payload: `Hello from the extension!`
-    });
+    } as MessageHandlerData<string>);
   } else if (command === "POST_DATA") {
     // Do something with the payload
   }
