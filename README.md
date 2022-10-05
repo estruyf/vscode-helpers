@@ -45,6 +45,51 @@ EditorHelper.showFile(filepath);
 
 ### Webview
 
+#### Message handler
+
+The `messageHandler` is a helper that makes it easier to send and request data from your extension. It is based on the `postMessage` and `onDidReceiveMessage`, but allows you to use async/await to send and receive data.
+
+The `messageHandler` is can send two types of messages to the extension:
+
+1. `messageHandler.send`: This is a one-way message, where you send data to the extension, but don't expect a response.
+2. `messageHandler.request`: This is a two-way message, where you send data to the extension, and expect a response.
+
+All you need to do to use it, is the following:
+
+**Webview**
+
+```typescript
+import { messageHandler } from '@estruyf/vscode/dist/client';
+
+// Sends a message with id: "GET_DATA"
+messageHandler.request<string>("GET_DATA").then((data: string) => {
+  // Do something with the returned data
+});
+
+// Sends a message with id: "POST_DATA" - no data is expected back
+messageHandler.send("POST_DATA", { dummy: "Nothing to report..." });
+```
+
+**Extension**
+
+```typescript
+panel.webview.onDidReceiveMessage(message => {
+  const { command, requestId, payload } = message;
+
+  if (command === "GET_DATA") {
+    // Do something with the payload
+
+    // Send a response back to the webview
+    panel.webview.postMessage({
+      command: requestId, // The requestId is used to identify the response
+      payload: `Hello from the extension!`
+    });
+  } else if (command === "POST_DATA") {
+    // Do something with the payload
+  }
+}, undefined, context.subscriptions);
+```
+
 #### Messenger
 
 The messenger can be used to send messages to your extension or listen to messages coming from your extension.
@@ -58,7 +103,7 @@ Messenger.getVsCodeAPI();
 // Listen to messages from your extension.
 const listener = (message: MessageEvent<EventData<T>>) => {
   const event = message.data;
-  console.log(event.command, event.data);
+  console.log(event.command, event.payload);
 };
 
 Messenger.listen<T>(listener);
@@ -67,7 +112,7 @@ Messenger.listen<T>(listener);
 Messenger.unlisten(listener);
 
 // Send a message to your extension
-Messenger.send('command', data);
+Messenger.send('command', payload);
 ```
 
 #### WebviewHelper
