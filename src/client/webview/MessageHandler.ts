@@ -8,10 +8,10 @@ class MessageHandler {
 
   private constructor() {
     Messenger.listen((message: MessageEvent<MessageHandlerData<any>>) => {
-      const { requestId, payload } = message.data;
+      const { requestId, payload, error } = message.data;
 
       if (requestId && MessageHandler.listeners[requestId]) {
-        MessageHandler.listeners[requestId](payload);
+        MessageHandler.listeners[requestId](payload, error);
       }
     });
   }
@@ -46,8 +46,12 @@ class MessageHandler {
     const requestId = v4();
 
     return new Promise((resolve, reject) => {
-      MessageHandler.listeners[requestId] = (payload: T) => {
-        resolve(payload);
+      MessageHandler.listeners[requestId] = (payload: T, error: any) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(payload);
+        }
 
         if (MessageHandler.listeners[requestId]) {
           delete MessageHandler.listeners[requestId];

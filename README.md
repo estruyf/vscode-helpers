@@ -94,6 +94,32 @@ panel.webview.onDidReceiveMessage(message => {
 }, undefined, context.subscriptions);
 ```
 
+##### Errors
+
+In case you want to send an error back to the webview, you can use the `error` property instead of the `payload` property and pass in your error data.
+
+**Extension**
+
+```typescript
+panel.webview.postMessage({
+  command,
+  requestId, // The requestId is used to identify the response
+  error: `Something went wrong!`
+} as MessageHandlerData<string>);
+```
+
+**Webview**
+
+```typescript
+messageHandler.request<string>('GET_DATA_ERROR')
+.then((msg) => {
+  setMessage(msg);
+})
+.catch((err) => {
+  setError(err);
+});
+```
+
 #### Messenger
 
 The messenger can be used to send messages to your extension or listen to messages coming from your extension.
