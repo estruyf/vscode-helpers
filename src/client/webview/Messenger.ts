@@ -40,7 +40,7 @@ export class Messenger {
   /**
    * Send a message from the webview to the extension
    * @param command 
-   * @param data 
+   * @param payload 
    */
   public static send(command: string, payload?: any): void {
     const vscode = Messenger.getVsCodeAPI();
@@ -48,6 +48,21 @@ export class Messenger {
       vscode.postMessage({ command, payload });
     } else {
       vscode.postMessage({ command });
+    }
+  }
+  
+  /**
+   * Send a message from the webview to the extension with a request ID (required for async/await responses)
+   * @param command 
+   * @param requestId 
+   * @param payload 
+   */
+  public static sendWithReqId(command: string, requestId: string, payload?: any): void {
+    const vscode = Messenger.getVsCodeAPI();
+    if (payload) {
+      vscode.postMessage({ command, requestId, payload });
+    } else {
+      vscode.postMessage({ command, requestId });
     }
   }
 

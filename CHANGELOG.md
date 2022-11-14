@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0] 2022-11-14
+
+- Implementation of the message handler for async/await responses
+
 ## [1.0.0] 2022-05-13
 
 - Changed the `EventData` interface data property to `payload`
