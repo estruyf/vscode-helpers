@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] 2022-10-xx
+## [1.1.0] 2022-11-14
 
 - Implementation of the message handler for async/await responses
 
