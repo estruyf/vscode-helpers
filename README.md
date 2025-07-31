@@ -168,6 +168,80 @@ import { WebviewHelper } from "@estruyf/vscode";
 WebviewHelper.getNonce();
 ```
 
+### Utilities
+
+#### Theme Utilities
+
+```typescript
+import { getThemes, getTheme } from "@estruyf/vscode";
+
+// Get all contributed themes
+const themes = getThemes();
+
+// Get the currently active theme or a specific theme by name
+const theme = await getTheme();
+const specificTheme = await getTheme("Dark+ (default dark)");
+```
+
+#### Path Utilities
+
+```typescript
+import { parseWinPath } from "@estruyf/vscode";
+
+// Convert Windows path to POSIX path
+const posixPath = parseWinPath("C:\\Users\\Name\\file.txt"); // "C:/Users/Name/file.txt"
+```
+
+#### Workspace Utilities
+
+```typescript
+import { bringToFront } from "@estruyf/vscode";
+import { Uri } from "vscode";
+
+// Bring a workspace folder to the front in VS Code
+await bringToFront(Uri.file("/path/to/workspace"));
+```
+
+### Extension Metadata
+
+#### ExtensionInfo
+
+The `ExtensionInfo` class provides metadata and state management for your extension.
+
+```typescript
+import { ExtensionInfo } from "@estruyf/vscode";
+
+const extInfo = ExtensionInfo.getInstance(context);
+const name = extInfo.name;
+const version = extInfo.version;
+const isUpdated = extInfo.isUpdated();
+extInfo.updateVersion();
+```
+
+### Team Settings
+
+#### TeamSettings
+
+The `TeamSettings` class helps manage team-based configuration files and settings.
+
+```typescript
+import { TeamSettings } from "@estruyf/vscode";
+
+// Initialize team settings
+TeamSettings.init("team-settings.json", "myExtension");
+
+// Get a team setting
+const value = TeamSettings.get<string>("settingKey");
+
+// Update a team setting
+await TeamSettings.update<string>("settingKey", "newValue");
+
+// Listen for config changes
+TeamSettings.onConfigChange((global) => {
+  // Handle config change
+});
+```
+
 ## License
 
 [MIT License](./LICENSE)
