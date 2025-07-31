@@ -161,37 +161,4 @@ export class ExtensionInfo {
   public async setState(key: string, value: any) {
     return await this.ctx.workspaceState.update(key, value);
   }
-
-  /**
-   * Retrieves a configuration setting value of type `T` from the specified configuration root and key.
-   *
-   * @typeParam T - The expected type of the configuration value.
-   * @param configRoot - The root section of the configuration to query.
-   * @param key - The key of the configuration setting to retrieve.
-   * @returns The value of the configuration setting if found, otherwise `undefined`.
-   */
-  public getSetting<T>(configRoot: string, key: string): T | undefined {
-    const extConfig = workspace.getConfiguration(configRoot);
-    return extConfig.get<T>(key);
-  }
-
-  /**
-   * Updates a VS Code configuration setting for the specified configuration root and key.
-   *
-   * @template T - The type of the value to set.
-   * @param configRoot - The root section of the configuration to update.
-   * @param key - The key of the configuration setting to update.
-   * @param value - The value to set for the configuration key.
-   * @param target - The configuration target (e.g., Workspace, Global). Defaults to Workspace.
-   * @returns A promise that resolves when the configuration has been updated.
-   */
-  public async setSetting<T>(
-    configRoot: string,
-    key: string,
-    value: T,
-    target: ConfigurationTarget = ConfigurationTarget.Workspace
-  ): Promise<void> {
-    const extConfig = workspace.getConfiguration(configRoot);
-    await extConfig.update(key, value, target);
-  }
 }

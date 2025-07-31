@@ -10,12 +10,6 @@ Using npm
 npm i @estruyf/vscode
 ```
 
-Using yarn
-
-```bash
-yarn add @estruyf/vscode
-```
-
 ## Helpers
 
 ### Configuration
@@ -23,24 +17,39 @@ yarn add @estruyf/vscode
 Configuration helpers to make it easier to fetch a setting of your extension.
 
 ```typescript
-import { Configuration } from '@estruyf/vscode';
+import { Configuration } from "@estruyf/vscode";
 
-const config = Configuration.get('section');
-const mdConfig = Configuration.getForLanguage<string>('markdown');
+const config = Configuration.get("section");
 
-const setting = Configuration.getSetting<string>('section', 'setting');
+const mdConfig = Configuration.getForLanguage<string>("markdown");
 
-await Configuration.updateSetting<string>('section', 'setting', value);
-await Configuration.updateSettingForLanguage<string>('markdown', 'setting', value);
+const setting = Configuration.getSetting<string>("section", "setting");
+
+await Configuration.updateSetting<string>("section", "setting", value);
+
+await Configuration.updateSettingForLanguage<string>(
+  "markdown",
+  "setting",
+  value
+);
 ```
 
 ### Editor
 
 ```typescript
-import { EditorHelper } from '@estruyf/vscode';
+import { EditorHelper } from "@estruyf/vscode";
 
 // Show a file in the editor
 EditorHelper.showFile(filepath);
+
+// Read a file's content
+const content = await EditorHelper.readFile(uri);
+
+// Write content to a file
+await EditorHelper.writeFile(uri, "Hello World");
+
+// Check if a file exists
+const exists = await EditorHelper.fileExists(uri);
 ```
 
 ### Webview
@@ -59,7 +68,7 @@ All you need to do to use it, is the following:
 **Webview**
 
 ```typescript
-import { messageHandler } from '@estruyf/vscode/dist/client';
+import { messageHandler } from "@estruyf/vscode/dist/client";
 
 // Sends a message with id: "GET_DATA"
 messageHandler.request<any>("GET_DATA").then((data: any) => {
@@ -74,24 +83,28 @@ messageHandler.send("POST_DATA", { dummy: "Nothing to report..." });
 **Extension**
 
 ```typescript
-import { MessageHandlerData } from '@estruyf/vscode'
+import { MessageHandlerData } from "@estruyf/vscode";
 
-panel.webview.onDidReceiveMessage(message => {
-  const { command, requestId, payload } = message;
+panel.webview.onDidReceiveMessage(
+  (message) => {
+    const { command, requestId, payload } = message;
 
-  if (command === "GET_DATA") {
-    // Do something with the payload
+    if (command === "GET_DATA") {
+      // Do something with the payload
 
-    // Send a response back to the webview
-    panel.webview.postMessage({
-      command,
-      requestId, // The requestId is used to identify the response
-      payload: `Hello from the extension!`
-    } as MessageHandlerData<string>);
-  } else if (command === "POST_DATA") {
-    // Do something with the payload
-  }
-}, undefined, context.subscriptions);
+      // Send a response back to the webview
+      panel.webview.postMessage({
+        command,
+        requestId, // The requestId is used to identify the response
+        payload: `Hello from the extension!`,
+      } as MessageHandlerData<string>);
+    } else if (command === "POST_DATA") {
+      // Do something with the payload
+    }
+  },
+  undefined,
+  context.subscriptions
+);
 ```
 
 ##### Errors
@@ -104,20 +117,21 @@ In case you want to send an error back to the webview, you can use the `error` p
 panel.webview.postMessage({
   command,
   requestId, // The requestId is used to identify the response
-  error: `Something went wrong!`
+  error: `Something went wrong!`,
 } as MessageHandlerData<string>);
 ```
 
 **Webview**
 
 ```typescript
-messageHandler.request<string>('GET_DATA_ERROR')
-.then((msg) => {
-  setMessage(msg);
-})
-.catch((err) => {
-  setError(err);
-});
+messageHandler
+  .request<string>("GET_DATA_ERROR")
+  .then((msg) => {
+    setMessage(msg);
+  })
+  .catch((err) => {
+    setError(err);
+  });
 ```
 
 #### Messenger
@@ -125,7 +139,7 @@ messageHandler.request<string>('GET_DATA_ERROR')
 The messenger can be used to send messages to your extension or listen to messages coming from your extension.
 
 ```typescript
-import { Messenger } from '@estruyf/vscode/dist/client';
+import { Messenger } from "@estruyf/vscode/dist/client";
 
 // Get the VS Code API in your webview
 Messenger.getVsCodeAPI();
@@ -142,13 +156,13 @@ Messenger.listen<T>(listener);
 Messenger.unlisten(listener);
 
 // Send a message to your extension
-Messenger.send('command', payload);
+Messenger.send("command", payload);
 ```
 
 #### WebviewHelper
 
 ```typescript
-import { WebviewHelper } from '@estruyf/vscode';
+import { WebviewHelper } from "@estruyf/vscode";
 
 // Generate a random string for your webview
 WebviewHelper.getNonce();
