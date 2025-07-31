@@ -1,6 +1,6 @@
-import { v4 } from 'uuid';
-import { EventData, MessageHandlerData } from '../../models';
-import { Messenger } from './Messenger';
+import { v4 } from "uuid";
+import { MessageHandlerData } from "../../models";
+import { Messenger } from "./Messenger";
 
 class MessageHandler {
   private static instance: MessageHandler;
@@ -29,8 +29,8 @@ class MessageHandler {
 
   /**
    * Send message to the extension layer
-   * @param message 
-   * @param payload 
+   * @param message
+   * @param payload
    */
   public send(message: string, payload?: any): void {
     Messenger.send(message, payload);
@@ -38,9 +38,9 @@ class MessageHandler {
 
   /**
    * Request data from the extension layer
-   * @param message 
-   * @param payload 
-   * @returns 
+   * @param message
+   * @param payload
+   * @returns
    */
   public request<T>(message: string, payload?: any): Promise<T> {
     const requestId = v4();

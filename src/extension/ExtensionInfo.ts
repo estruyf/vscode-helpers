@@ -1,13 +1,20 @@
-import { ExtensionContext, ExtensionMode, extensions } from "vscode";
+import {
+  ConfigurationTarget,
+  ExtensionContext,
+  ExtensionMode,
+  extensions,
+  SecretStorage,
+  workspace,
+} from "vscode";
 
 export class ExtensionInfo {
   private static instance: ExtensionInfo;
-  
+
   private constructor(private ctx: ExtensionContext) {}
 
   /**
    * Creates the singleton instance for the panel
-   * @param extPath 
+   * @param extPath
    */
   public static getInstance(ctx?: ExtensionContext): ExtensionInfo {
     if (!ExtensionInfo.instance && ctx) {
@@ -19,12 +26,14 @@ export class ExtensionInfo {
 
   /**
    * Check if the current version was updated
-   * @returns 
+   * @returns
    */
   public isUpdated(): boolean {
     const pkgJson = this.getPackageJson();
     const installedVersion = pkgJson.version;
-    const usedVersion = this.ctx.globalState.get<string>(`${pkgJson.name}:version`);
+    const usedVersion = this.ctx.globalState.get<string>(
+      `${pkgJson.name}:version`
+    );
 
     return usedVersion !== installedVersion;
   }
@@ -39,7 +48,7 @@ export class ExtensionInfo {
 
   /**
    * Get the currently used version of the extension
-   * @returns 
+   * @returns
    */
   public getUsedVersion(): string | undefined {
     const pkgJson = this.getPackageJson();
@@ -47,8 +56,17 @@ export class ExtensionInfo {
   }
 
   /**
+   * Gets the current extension context.
+   *
+   * @returns The {@link ExtensionContext} associated with this extension.
+   */
+  public get context(): ExtensionContext {
+    return this.ctx;
+  }
+
+  /**
    * Get the currently installed version of the extension
-   * @returns 
+   * @returns
    */
   public getInstalledVersion(): string {
     const pkgJson = this.getPackageJson();
@@ -57,7 +75,7 @@ export class ExtensionInfo {
 
   /**
    * Retrieve the package JSON file of the extension
-   * @returns 
+   * @returns
    */
   public getPackageJson() {
     return this.ctx.extension.packageJSON;
@@ -66,14 +84,14 @@ export class ExtensionInfo {
   /**
    * Get the name of the extension
    */
-   public get name(): string {
+  public get name(): string {
     return this.ctx.extension.packageJSON.name;
   }
 
   /**
    * Get the name of the extension
    */
-   public get displayName(): string {
+  public get displayName(): string {
     return this.ctx.extension.packageJSON.displayName;
   }
 
@@ -87,7 +105,93 @@ export class ExtensionInfo {
   /**
    * Check if the extension is in production/development mode
    */
-   public get isProductionMode(): boolean {
+  public get isProductionMode(): boolean {
     return this.ctx.extensionMode === ExtensionMode.Production;
+  }
+
+  /**
+   * Get the extension's subscriptions
+   */
+  public get subscriptions(): { dispose(): any }[] {
+    return this.ctx.subscriptions;
+  }
+
+  /**
+   * Get the extension's secrets
+   */
+  public get secrets(): SecretStorage {
+    return this.ctx.secrets;
+  }
+
+  /**
+   * Get the extension's path
+   */
+  public get extensionPath(): string {
+    return this.ctx.extensionPath;
+  }
+
+  /**
+   * Gets the workspace folder.
+   * @returns The first workspace folder or null if no workspace folders are available.
+   */
+  public get workspaceFolder() {
+    const folders = workspace.workspaceFolders;
+    if (!folders) {
+      return null;
+    }
+
+    return folders[0];
+  }
+
+  /**
+   * Retrieves the value associated with the specified key from the workspace state.
+   * @param key - The key of the value to retrieve.
+   * @returns The value associated with the specified key, or undefined if the key does not exist.
+   */
+  public getState<T>(key: string): T | undefined {
+    return this.ctx.workspaceState.get(key);
+  }
+
+  /**
+   * Sets the state of a key-value pair in the workspace state.
+   * @param key - The key of the state.
+   * @param value - The value to set for the state.
+   * @returns A promise that resolves when the state is updated.
+   */
+  public async setState(key: string, value: any) {
+    return await this.ctx.workspaceState.update(key, value);
+  }
+
+  /**
+   * Retrieves a configuration setting value of type `T` from the specified configuration root and key.
+   *
+   * @typeParam T - The expected type of the configuration value.
+   * @param configRoot - The root section of the configuration to query.
+   * @param key - The key of the configuration setting to retrieve.
+   * @returns The value of the configuration setting if found, otherwise `undefined`.
+   */
+  public getSetting<T>(configRoot: string, key: string): T | undefined {
+    const extConfig = workspace.getConfiguration(configRoot);
+    return extConfig.get<T>(key);
+  }
+
+  /**
+   * Updates a VS Code configuration setting for the specified configuration root and key.
+   *
+   * @template T - The type of the value to set.
+   * @param configRoot - The root section of the configuration to update.
+   * @param key - The key of the configuration setting to update.
+   * @param value - The value to set for the configuration key.
+   * @param target - The configuration target (e.g., Workspace, Global). Defaults to Workspace.
+   * @returns A promise that resolves when the configuration has been updated.
+   */
+  public async setSetting<T>(
+    configRoot: string,
+    key: string,
+    value: T,
+    target: ConfigurationTarget = ConfigurationTarget.Workspace
+  ): Promise<void> {
+    const extConfig = workspace.getConfiguration(configRoot);
+    await extConfig.update(key, value, target);
   }
 }
