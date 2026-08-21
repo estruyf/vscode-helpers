@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.1] 2026-08-21
+
+- Updated `uuid` dependency to v11
+- Removed the `@types/uuid` dev dependency, as `uuid` now ships its own types
+
 ## [1.2.0] 2025-07-31
 
 - Added theme utilities: `getThemes` and `getTheme` to retrieve and parse VS Code themes contributed by installed extensions.
