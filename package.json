@@ -1,6 +1,6 @@
 {
   "name": "@estruyf/vscode",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A collection of utility functions and helpers to simplify Visual Studio Code extension development.",
   "main": "dist/index.js",
   "scripts": {
